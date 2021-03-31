@@ -1,15 +1,19 @@
+#pragma once
 #include "Bullet.h"
 #include <vector>
 
-
 class BulletList {
-	std::vector<Bullet> bulletArray;
+	SDL_Renderer* renderer;
 
 public:
 
 	BulletList();
+	BulletList(SDL_Renderer* renderer);
 	~BulletList();
 
-	void AddBullet(SDL_Renderer* renderer, int x, int y);
-	void UpdateBullets(SDL_Renderer* renderer);
+	void addBullet(int x, int y);
+	void updateBullets();
+
+	std::vector<Bullet> bulletArray;
+
 };

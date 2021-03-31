@@ -25,6 +25,4 @@ public:
 
 	void cleanup();
 
-
-	float speed = 5.0f;
 };

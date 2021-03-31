@@ -15,8 +15,8 @@ player::player(SDL_Renderer* renderer, const char* filename,
 	src.x = 0;
 	src.y = 0;
 
-	dst.x = 0;
-	dst.y = 0;
+	dst.x = 300;
+	dst.y = 300;
 	dst.w = w;
 	dst.h = h;
 }
@@ -63,8 +63,6 @@ void player::moveBy(int x, int y)
 {
 	dst.x += x * speed;
 	dst.y += y * speed;
-
-	std::cout << "x|y: " << dst.x << "|" << dst.y << "      sx|sy: " << x << "|" << y << std::endl;
 }
 
 void player::draw(SDL_Renderer* renderer)
@@ -72,3 +70,10 @@ void player::draw(SDL_Renderer* renderer)
 	SDL_RenderCopy(renderer, pSpriteTex, &src, &dst);
 }
 
+bool player::checkCollision(SDL_Rect r) {
+	return
+		r.x < dst.x + dst.w &&
+		r.x + r.w > dst.x &&
+		r.y < dst.y + dst.h &&
+		r.h + r.y > dst.y;
+}

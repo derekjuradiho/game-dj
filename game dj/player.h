@@ -30,10 +30,13 @@ public:
 	void moveBy(int x, int y);
 	void draw(SDL_Renderer* renderer);
 
+	bool checkCollision(SDL_Rect r);
+
 	void cleanup();
 
 	int getWeaponX() { return dst.x + dst.w / 2; }
 	int getWeaponY() { return dst.y; };
 
 	float speed = 5.0f;
+
 };

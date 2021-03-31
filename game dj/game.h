@@ -5,7 +5,9 @@
 #include "Sprite.h"
 #include "player.h"
 #include "BulletList.h"
-#include "enemy.h"
+#include "smoke.h"
+#include "AsteroidList.h"
+#include "CollisionManager.h"
 
 class Game
 {
@@ -28,11 +30,14 @@ public:
 
 	bool running() { return m_bRunning; }
 private:
-	enemy zombie;
+	
 	player cboy;
 	Sprite background;
 	BulletList bullets;
-
+	Smoke smoke;
+	bool animateSmoke = true;
+	AsteroidList asteroids;
+	CollisionManager collisionManager;
 
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
@@ -49,6 +54,14 @@ private:
 	float deltaTime;
 
 	float gameTime = 0;
+
+	float asteroidSpawnTimer = 0;
+	float asteroidSpawnInterval = 3;
+
+
+
+	void asteroidSpawner();
+
 };
 
 #endif 

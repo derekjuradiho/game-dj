@@ -6,7 +6,7 @@ Bullet::Bullet()
 
 Bullet::Bullet(SDL_Renderer* renderer, int x, int y)
 {
-	pSpriteTex = IMG_LoadTexture(renderer, "Bullet.bmp");
+	pSpriteTex = IMG_LoadTexture(renderer, "Bullet.bmp ");
 
 	SDL_QueryTexture(pSpriteTex, NULL, NULL, &src.w, &src.h);
 
@@ -36,4 +36,13 @@ void Bullet::draw(SDL_Renderer* renderer)
 
 void Bullet::cleanup()
 {
+}
+
+bool Bullet::checkCollision(SDL_Rect r)
+{
+	return
+		r.x < dst.x + dst.w &&
+		r.x + r.w > dst.x &&
+		r.y < dst.y + dst.h &&
+		r.h + r.y > dst.y;
 }

@@ -55,8 +55,10 @@ void Game::prepare()
 {
 	background = Sprite(m_pRenderer, "bluecavern.bmp", 0, 0, 640, 480, 0, 0, 640, 480);
 	cboy = player(m_pRenderer, "sprite.bmp", 70, 70);
-	zombie = enemy(m_pRenderer, "zombie.bmp", 70, 70);
-	bullets = BulletList();
+	bullets = BulletList(m_pRenderer);
+	smoke = Smoke(m_pRenderer, 32, 32);
+	asteroids = AsteroidList(m_pRenderer);
+	collisionManager = CollisionManager(&bullets, &asteroids, &cboy);
 
 	deltaTime = 1.0f / targetFramerate;
 	currentFrameStartTime = SDL_GetTicks();
@@ -96,7 +98,7 @@ void Game::handleEvents()
 				break;
 
 			case SDLK_SPACE:
-				bullets.AddBullet(m_pRenderer, cboy.getWeaponX(), cboy.getWeaponY());
+				bullets.addBullet(cboy.getWeaponX(), cboy.getWeaponY());
 				break;
 			default:
 				break;
@@ -142,7 +144,9 @@ void Game::handleEvents()
 
 void Game::update()
 {
+	asteroids.update();
 	cboy.moveBy(cboy.velX, cboy.velY);
+	asteroidSpawner();
 }
 
 void Game::render()
@@ -151,11 +155,17 @@ void Game::render()
 
 	background.draw(m_pRenderer);
 
-	zombie.draw(m_pRenderer);
+	asteroids.draw();
 
 	cboy.draw(m_pRenderer);
 
-	bullets.UpdateBullets(m_pRenderer);
+	if (animateSmoke)
+	{
+		animateSmoke = smoke.animate();
+	}
+
+	bullets.updateBullets();
+	m_bRunning = !collisionManager.checkCollisions();
 
 	SDL_RenderPresent(m_pRenderer);
 }
@@ -189,3 +199,13 @@ void Game::cleanup()
 	SDL_Quit();
 }
 
+void Game::asteroidSpawner()
+{
+	asteroidSpawnTimer += deltaTime;
+	if (asteroidSpawnTimer >= asteroidSpawnInterval)
+	{
+		asteroids.spawnAsteroid();
+		asteroidSpawnTimer = 0;
+	}
+
+}
